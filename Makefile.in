@@ -272,11 +272,14 @@ TEST_SHLIB_VAR_SWIG_RB=\
 COMPILE_SVNXX = $(LT_COMPILE_CXX) $(SVNXX_INCLUDES) -o $@ -c
 COMPILE_SVNXX_TEST = $(LT_COMPILE_CXX) $(SVNXX_INCLUDES) $(BOOST_TEST_CPPFLAGS) -o $@ -c
 
-LINK = $(LIBTOOL) $(LTFLAGS) --mode=link $(CC) $(LT_LDFLAGS) $(CFLAGS) $(LDFLAGS) -rpath $(libdir)
-LINK_LIB = $(LINK) $(LT_SO_VERSION)
-LINK_CXX = $(LIBTOOL) $(LTCXXFLAGS) --mode=link $(CXX) $(LT_LDFLAGS) $(CXXFLAGS) $(LDFLAGS) -rpath $(libdir)
-LINK_CXX_LIB = $(LINK_CXX) $(LT_SO_VERSION)
-LINK_SVNXX_TEST = $(LINK_CXX) $(BOOST_TEST_LDFLAGS)
+LINK = $(LIBTOOL) $(LTFLAGS) --mode=link $(CC) $(LT_LDFLAGS) $(CFLAGS) $(LDFLAGS)
+LINK_LIB = $(LINK) $(LT_SO_VERSION) -rpath $(libdir)
+LINK_CXX = $(LIBTOOL) $(LTCXXFLAGS) --mode=link $(CXX) $(LT_LDFLAGS) $(CXXFLAGS) $(LDFLAGS)
+LINK_CXX_LIB = $(LINK_CXX) $(LT_SO_VERSION) -rpath $(libdir)
+LINK_SVNXX_TEST = $(LINK_CXX) $(BOOST_TEST_LDFLAGS) -no-install
+LINK_TEST = $(LINK) -no-install
+LINK_TEST_LIB = $(LINK_TEST) -avoid-version
+LINK_EXE = $(LINK)
 
 # special link rule for mod_dav_svn
 LINK_APACHE_MOD = $(LIBTOOL) $(LTFLAGS) --mode=link $(CC) $(LT_LDFLAGS) $(CFLAGS) $(LDFLAGS) -rpath $(APACHE_LIBEXECDIR) -avoid-version -module $(APACHE_LDFLAGS) -shared

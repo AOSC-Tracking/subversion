@@ -600,7 +600,7 @@ class TargetLinked(Target):
     self.install = options.get('install')
     self.compile_cmd = options.get('compile-cmd')
     self.sources = options.get('sources', '*.c *.cpp')
-    self.link_cmd = options.get('link-cmd', '$(LINK)')
+    self.link_cmd = options.get('link-cmd', '$(LINK_LIB)')
 
     self.external_lib = options.get('external-lib')
     self.external_project = options.get('external-project')
@@ -659,6 +659,14 @@ class TargetExe(TargetLinked):
     self.testing = options.get('testing')
 
     self.msvc_force_static = options.get('msvc-force-static') == 'yes'
+
+    if self.install in ['test', 'bdb-test', 'sub-test', ]:
+      self.link_cmd = '$(LINK_TEST)'
+    elif self.install in ['bin', 'tools']:
+      self.link_cmd = '$(LINK_EXE)'
+    elif self.link_cmd == '$(LINK_LIB)':
+      raise GenError('ERROR: Unknown executable link type for ' + self.name + \
+                     ': ' + self.link_cmd + ' (' + self.install + ')')
 
   def add_dependencies(self):
     TargetLinked.add_dependencies(self)
